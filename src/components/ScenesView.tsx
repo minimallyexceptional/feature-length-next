@@ -24,7 +24,7 @@ import {
 } from '@dnd-kit/sortable';
 import useScriptStore from '../store/scriptStore';
 import { Scene } from '../types';
-import SceneEditor from './SceneEditor';
+import ModalSceneEditor from './ModalSceneEditor';
 import { v4 as uuidv4 } from 'uuid';
 
 interface SortableSceneItemProps {
@@ -345,7 +345,7 @@ const ScenesView: React.FC = () => {
 
       {/* Add SceneEditor modal */}
       {editingSceneId && (
-        <SceneEditor
+        <ModalSceneEditor
           sceneId={editingSceneId}
           onClose={() => setEditingSceneId(null)}
         />

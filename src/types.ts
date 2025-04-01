@@ -48,13 +48,13 @@ export interface ScriptState {
   currentSceneId: string | null;
   currentCharacterId: string;
   currentLocationId: string;
-  currentDraftId: string;
+  currentDraftId: string | null;
   previewTheme: 'light' | 'dark';
   setPreviewTheme: (theme: 'light' | 'dark') => void;
   addScene: (scene: Scene) => void;
   updateScene: (id: string, updatedScene: Scene) => void;
   reorderScenes: (scenes: Scene[]) => void;
-  setCurrentScene: (id: string) => void;
+  setCurrentScene: (id: string | null) => void;
   deleteScene: (id: string) => void;
   addCharacter: (character: Character) => void;
   updateCharacter: (id: string, updatedCharacter: Character) => void;

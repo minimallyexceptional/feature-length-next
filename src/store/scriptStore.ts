@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { v4 as uuidv4 } from 'uuid';
-import { Scene, Character, Location, Draft, ScriptState, TitlePage } from '../types';
+import type { Scene, Character, Location, Draft, TitlePage, ScriptState } from '../types';
 
 const defaultScene: Omit<Scene, 'id'> = {
   heading: 'INT./EXT. BLOOM HOUSE - (PRESENT) DAY',
@@ -39,40 +39,6 @@ const defaultTitlePage: TitlePage = {
   }),
 };
 
-export interface ScriptState {
-  scenes: Scene[];
-  characters: Character[];
-  locations: Location[];
-  drafts: Draft[];
-  titlePage: TitlePage;
-  currentSceneId: string | null;
-  currentCharacterId: string;
-  currentLocationId: string;
-  currentDraftId: string;
-  previewTheme: 'light' | 'dark';
-  setPreviewTheme: (theme: 'light' | 'dark') => void;
-  addScene: (scene: Scene) => void;
-  updateScene: (id: string, updatedScene: Scene) => void;
-  reorderScenes: (scenes: Scene[]) => void;
-  setCurrentScene: (id: string) => void;
-  deleteScene: (id: string) => void;
-  addCharacter: (character: Character) => void;
-  updateCharacter: (id: string, updatedCharacter: Character) => void;
-  reorderCharacters: (characters: Character[]) => void;
-  setCurrentCharacter: (id: string) => void;
-  addLocation: (location: Location) => void;
-  updateLocation: (id: string, updatedLocation: Location) => void;
-  reorderLocations: (locations: Location[]) => void;
-  setCurrentLocation: (id: string) => void;
-  saveDraft: (name: string) => void;
-  loadDraft: (id: string) => void;
-  deleteDraft: (id: string) => void;
-  duplicateDraft: (id: string) => void;
-  renameDraft: (id: string, newName: string) => void;
-  updateTitlePage: (titlePage: TitlePage) => void;
-  loadBackup: (backup: ScriptState) => void;
-}
-
 const useScriptStore = create<ScriptState>((set) => {
   // Create initial scene, character, and location with UUIDs
   const initialScene = { ...defaultScene, id: uuidv4() };
@@ -83,7 +49,7 @@ const useScriptStore = create<ScriptState>((set) => {
   const initialDraft: Draft = {
     id: uuidv4(),
     name: 'Initial Draft',
-    createdAt: new Date().toISOString(),
+    createdAt: new Date(),
     scenes: [initialScene],
     characters: [initialCharacter],
     locations: [initialLocation],
@@ -165,7 +131,7 @@ const useScriptStore = create<ScriptState>((set) => {
       };
     }),
     
-    setCurrentScene: (id) => set({ currentSceneId: id }),
+    setCurrentScene: (id: string | null) => set({ currentSceneId: id }),
 
     deleteScene: (id: string) => set((state) => {
       const newScenes = state.scenes.filter(scene => scene.id !== id);
@@ -317,21 +283,20 @@ const useScriptStore = create<ScriptState>((set) => {
     
     setCurrentLocation: (id) => set({ currentLocationId: id }),
 
-    saveDraft: (name) => set((state) => {
-      const newDraft: Draft = {
-        id: uuidv4(),
-        name,
-        createdAt: new Date().toISOString(),
-        scenes: [...state.scenes],
-        characters: [...state.characters],
-        locations: [...state.locations],
-        titlePage: { ...state.titlePage },
-      };
-      return {
-        drafts: [...state.drafts, newDraft],
-        currentDraftId: newDraft.id,
-      };
-    }),
+    saveDraft: (name: string) => set((state) => ({
+      drafts: [
+        ...state.drafts,
+        {
+          id: uuidv4(),
+          name,
+          createdAt: new Date(),
+          scenes: state.scenes,
+          characters: state.characters,
+          locations: state.locations,
+          titlePage: state.titlePage,
+        },
+      ],
+    })),
 
     loadDraft: (id) => set((state) => {
       const draft = state.drafts.find(d => d.id === id);
@@ -360,7 +325,7 @@ const useScriptStore = create<ScriptState>((set) => {
         ...draftToDuplicate,
         id: uuidv4(),
         name: `${draftToDuplicate.name} (Copy)`,
-        createdAt: new Date().toISOString(),
+        createdAt: new Date(),
       };
 
       return {

@@ -6,16 +6,17 @@ import CharacterAutocomplete from './CharacterAutocomplete';
 import LocationAutocomplete from './LocationAutocomplete';
 import ZenModeEditor from './ZenModeEditor';
 import PreviewThemeToggle from './PreviewThemeToggle';
+import { X } from 'lucide-react';
 
 const SCENE_INDICATORS = ['INT', 'EXT', 'INT.', 'EXT.', 'I/E', 'EST'];
 const AUTO_SAVE_INTERVAL = 3000; // 3 seconds
 
-interface SceneEditorProps {
+interface ModalSceneEditorProps {
   sceneId: string;
   onClose: () => void;
 }
 
-const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId, onClose }) => {
+const ModalSceneEditor: React.FC<ModalSceneEditorProps> = ({ sceneId, onClose }) => {
   const { scenes, currentSceneId, updateScene, addScene, previewTheme } = useScriptStore();
   const currentScene = scenes.find(scene => scene.id === sceneId);
   const editorRef = useRef<HTMLTextAreaElement>(null);
@@ -294,23 +295,9 @@ const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId, onClose }) => {
 
   const handleToolbarInsert = (text: string) => {
     if (!editorRef.current) return;
-
-    const textarea = editorRef.current;
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const content = textarea.value;
-
-    const newContent = content.substring(0, start) + text + content.substring(end);
-    updateScene(currentScene.id, { 
-      ...currentScene!,
-      content: newContent 
-    });
-
-    setTimeout(() => {
-      textarea.focus();
-      const newPosition = start + text.length;
-      textarea.setSelectionRange(newPosition, newPosition);
-    }, 0);
+    const { selectionStart, selectionEnd } = editorRef.current;
+    const newContent = currentScene.content.slice(0, selectionStart) + text + currentScene.content.slice(selectionEnd);
+    updateScene(currentScene.id, { ...currentScene, content: newContent });
   };
 
   if (isZenMode) {
@@ -330,91 +317,66 @@ const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId, onClose }) => {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="w-full max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-xl">
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-lg font-medium text-black dark:text-white">Edit Scene</h2>
-          <button
-            onClick={onClose}
-            className="p-2 text-gray-500 hover:text-black dark:hover:text-gray-300"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-        
-        <div className="p-4">
-          <div className="h-full flex flex-col">
-            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
-              <input
-                type="text"
-                value={currentScene.heading}
-                onChange={handleHeadingChange}
-                className="flex-1 bg-transparent border-none px-0 text-lg font-medium text-black dark:text-white placeholder-gray-400 focus:outline-none focus:ring-0"
-                placeholder="Scene Heading"
-              />
-            </div>
-            <div className="flex-1 overflow-y-auto p-4">
-              <textarea
-                ref={editorRef}
-                value={currentScene.content}
-                onChange={handleInput}
-                onKeyDown={handleKeyDown}
-                className="w-full bg-transparent border-none p-0 resize-none focus:outline-none focus:ring-0 font-mono text-black dark:text-white placeholder-gray-400"
-                placeholder="Start writing your scene...
-Type @ to insert a character
-Type # to insert a location
-Type INT/EXT to start a new scene"
-                rows={1}
-              />
-            </div>
-
-            <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm text-black dark:text-gray-400 flex items-center gap-4">
-              <div className="flex items-center gap-1">
-                <span className="font-mono">@</span>
-                <span>Character</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="font-mono">#</span>
-                <span>Location</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="font-mono">INT/EXT</span>
-                <span>Scene Heading</span>
-              </div>
-            </div>
-
-            <EditorToolbar 
-              onInsert={handleToolbarInsert} 
-              isZenMode={isZenMode}
-              onToggleZenMode={() => setIsZenMode(true)}
-            />
-
-            {characterAutocomplete.show && (
-              <CharacterAutocomplete
-                position={characterAutocomplete.position}
-                query={characterAutocomplete.query}
-                onSelect={handleCharacterSelect}
-                onClose={() => setCharacterAutocomplete(prev => ({ ...prev, show: false }))}
-              />
-            )}
-
-            {locationAutocomplete.show && (
-              <LocationAutocomplete
-                position={locationAutocomplete.position}
-                query={locationAutocomplete.query}
-                onSelect={handleLocationSelect}
-                onClose={() => setLocationAutocomplete(prev => ({ ...prev, show: false }))}
-              />
-            )}
-
-            <EditorStatusBar content={currentScene.content} />
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div ref={containerRef} className="w-full max-w-4xl h-[90vh] bg-white dark:bg-gray-900 rounded-lg shadow-xl flex flex-col">
+        <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
+          <input
+            type="text"
+            value={currentScene.heading}
+            onChange={e => updateScene(currentScene.id, { ...currentScene, heading: e.target.value })}
+            className="bg-transparent text-xl font-semibold w-full focus:outline-none text-black dark:text-white"
+            placeholder="Scene Heading"
+          />
+          <div className="flex items-center space-x-2">
+            <PreviewThemeToggle />
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full"
+            >
+              <X className="w-5 h-5 text-gray-500" />
+            </button>
           </div>
         </div>
+        
+        <EditorToolbar 
+          onInsert={handleToolbarInsert}
+          isZenMode={isZenMode}
+          onToggleZenMode={() => setIsZenMode(true)}
+        />
+        
+        <div className="flex-1 relative">
+          <textarea
+            ref={editorRef}
+            value={currentScene.content}
+            onChange={handleInput}
+            onKeyDown={handleKeyDown}
+            className="w-full h-full p-4 bg-transparent resize-none focus:outline-none font-mono text-black dark:text-white"
+            placeholder="Start writing your scene..."
+          />
+          
+          {characterAutocomplete.show && (
+            <CharacterAutocomplete
+              query={characterAutocomplete.query}
+              position={characterAutocomplete.position}
+              onSelect={handleCharacterSelect}
+              onClose={() => setCharacterAutocomplete(prev => ({ ...prev, show: false }))}
+            />
+          )}
+          
+          {locationAutocomplete.show && (
+            <LocationAutocomplete
+              query={locationAutocomplete.query}
+              position={locationAutocomplete.position}
+              onSelect={handleLocationSelect}
+              onClose={() => setLocationAutocomplete(prev => ({ ...prev, show: false }))}
+            />
+          )}
+        </div>
+        
+        <EditorStatusBar content={currentScene.content} />
       </div>
     </div>
   );
 };
 
-export default SceneEditor;
+export default ModalSceneEditor;

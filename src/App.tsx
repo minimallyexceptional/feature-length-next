@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import SceneNavigator from './components/SceneNavigator';
-import SceneEditor from './components/SceneEditor';
+import InlineSceneEditor from './components/InlineSceneEditor';
 import ScriptPreview from './components/ScriptPreview';
 import TopBar from './components/TopBar';
 import ScenesView from './components/ScenesView';
@@ -153,7 +153,13 @@ function App() {
               minSize={30}
               className="relative"
             >
-              <SceneEditor />
+              {currentSceneId ? (
+                <InlineSceneEditor sceneId={currentSceneId} />
+              ) : (
+                <div className="h-full flex items-center justify-center text-gray-500 dark:text-gray-400">
+                  Select a scene to start editing
+                </div>
+              )}
               <div className="absolute right-0 top-1/2 -translate-y-1/2 z-20">
                 <div className="relative right-[-11px]">
                   <button
