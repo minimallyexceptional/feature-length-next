@@ -1,0 +1,304 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Deep space theme */
+    --primary-50: 240 249 255;
+    --primary-100: 224 242 254;
+    --primary-200: 186 230 253;
+    --primary-300: 125 211 252;
+    --primary-400: 56 189 248;
+    --primary-500: 14 165 233;
+    --primary-600: 2 132 199;
+    --primary-700: 3 105 161;
+    --primary-800: 7 89 133;
+    --primary-900: 12 74 110;
+    
+    /* Accent colors */
+    --accent-purple: 147 51 234;
+    --accent-rose: 225 29 72;
+  }
+
+  /* Custom Scrollbar Styles */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-200/80 dark:bg-gray-700/80 
+           hover:bg-gray-300/90 dark:hover:bg-gray-600/90
+           rounded-full
+           transition-colors duration-200;
+  }
+
+  /* Firefox scrollbar styles */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(229 231 235 / 0.8) transparent; /* light mode default */
+  }
+
+  .dark * {
+    scrollbar-color: rgb(55 65 81 / 0.8) transparent; /* dark mode default */
+  }
+
+  html {
+    @apply antialiased;
+  }
+
+  html, body {
+    @apply h-full w-full overflow-hidden bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  }
+
+  #root {
+    @apply h-full w-full overflow-hidden;
+  }
+
+  h1 {
+    @apply text-2xl font-semibold tracking-tight text-gray-900 dark:text-gray-100;
+  }
+
+  h2 {
+    @apply text-xl font-medium tracking-tight text-gray-800 dark:text-gray-200;
+  }
+
+  h3 {
+    @apply text-lg font-medium text-gray-800 dark:text-gray-200;
+  }
+}
+
+@layer components {
+  .scene-heading {
+    @apply font-mono text-lg text-gray-800 dark:text-gray-200 tracking-wider uppercase;
+  }
+
+  .scene-description {
+    @apply font-sans text-gray-600 dark:text-gray-400 leading-relaxed;
+  }
+
+  .nav-item {
+    @apply px-4 py-2 rounded-full text-sm font-medium transition-all duration-200
+    flex items-center gap-2 hover:text-gray-900 dark:hover:text-white;
+  }
+
+  .nav-item-active {
+    @apply bg-blue-600 text-white shadow-lg shadow-blue-500/20;
+  }
+
+  .nav-item-inactive {
+    @apply text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50;
+  }
+
+  .card {
+    @apply rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/40 backdrop-blur-sm 
+    hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all duration-200;
+  }
+
+  .search-input {
+    @apply w-full pl-10 pr-4 py-2 bg-gray-100/50 dark:bg-gray-800/50 
+    border border-gray-200/50 dark:border-gray-700/50 rounded-full
+    text-gray-900 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-500 
+    focus:outline-none focus:ring-2 focus:ring-blue-500
+    focus:bg-gray-50/70 dark:focus:bg-gray-800/70 transition-all duration-200;
+  }
+
+  .btn {
+    @apply px-4 py-2 rounded-full font-medium transition-all duration-200
+    flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white
+    shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 
+    text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white
+    border border-gray-200 dark:border-gray-700;
+  }
+
+  .hover-lift {
+    @apply hover:-translate-y-0.5 hover:shadow-lg transition-all duration-200;
+  }
+}
+
+/* Theme transition classes */
+.transition-colors {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+/* Keep existing panel styles */
+[data-panel] {
+  height: 100%;
+}
+
+[data-panel-group] {
+  height: 100%;
+}
+
+[data-panel-resize-handle] {
+  @apply bg-gray-200/50 dark:bg-gray-800/50 backdrop-blur-sm transition-colors duration-200;
+}
+
+[data-panel-resize-handle]:hover {
+  @apply bg-gray-300 dark:bg-gray-700;
+}
+
+/* Screenplay preview styles */
+.screenplay-preview h1,
+.screenplay-preview h2,
+.screenplay-preview h3,
+.screenplay-preview h4,
+.screenplay-preview h5,
+.screenplay-preview h6 {
+  @apply font-bold uppercase tracking-wider mt-8 mb-4 text-black dark:text-gray-100;
+}
+
+.screenplay-preview p {
+  @apply my-4 text-black dark:text-gray-300;
+}
+
+.screenplay-preview .character {
+  @apply mt-4 mb-1 uppercase font-medium text-center text-black dark:text-gray-100;
+}
+
+.screenplay-preview .dialogue {
+  @apply mx-16 mb-4 text-center text-black dark:text-gray-300;
+}
+
+.screenplay-preview .parenthetical {
+  @apply mx-20 mb-1 text-center italic text-black dark:text-gray-400;
+}
+
+.screenplay-preview .transition {
+  @apply text-right uppercase my-4 font-medium text-black dark:text-gray-300;
+}
+
+.screenplay-preview .centered {
+  @apply text-center my-4 text-black dark:text-gray-300;
+}
+
+.screenplay-preview .scene {
+  @apply text-black dark:text-gray-400 font-semibold my-4;
+}
+
+.screenplay-preview .synopsis {
+  @apply text-black dark:text-gray-400 italic my-4;
+}
+
+.screenplay-preview .note {
+  @apply bg-yellow-50 dark:bg-yellow-900/30 p-2 rounded my-4 text-sm text-black dark:text-gray-300 
+    border border-yellow-200 dark:border-yellow-900/50;
+}
+
+/* Zen Mode Styles */
+.zen-mode-overlay {
+  @apply fixed inset-0 bg-black/90 dark:bg-black/95 z-50;
+}
+
+.zen-mode-container {
+  @apply fixed inset-0 bg-transparent z-50 overflow-hidden flex flex-col;
+}
+
+.zen-mode {
+  @apply px-12 py-32 text-2xl leading-relaxed flex-1 w-full mx-auto;
+  @apply bg-transparent;
+  @apply text-gray-200 dark:text-gray-300;
+  @apply placeholder-gray-500/50 dark:placeholder-gray-600/50;
+  scroll-behavior: smooth;
+  line-height: 2;
+  letter-spacing: 0.01em;
+}
+
+/* Typewriter cursor animation */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.zen-mode {
+  caret-color: theme('colors.blue.400');
+  caret-shape: block;
+}
+
+/* Focus line highlight */
+.zen-mode {
+  background-image: linear-gradient(
+    transparent calc(50vh - 2em), 
+    rgba(255, 255, 255, 0.03) calc(50vh - 2em),
+    rgba(255, 255, 255, 0.03) calc(50vh + 2em),
+    transparent calc(50vh + 2em)
+  );
+}
+
+.dark .zen-mode {
+  background-image: linear-gradient(
+    transparent calc(50vh - 2em), 
+    rgba(255, 255, 255, 0.02) calc(50vh - 2em),
+    rgba(255, 255, 255, 0.02) calc(50vh + 2em),
+    transparent calc(50vh + 2em)
+  );
+}
+
+/* Status pills */
+.zen-mode-status-pill {
+  @apply px-3 py-1.5 rounded-full bg-white/10 text-sm text-gray-300 
+    font-mono tracking-wide backdrop-blur-sm;
+}
+
+/* Screenplay preview in zen mode */
+.zen-mode.screenplay-preview {
+  @apply text-gray-200 dark:text-gray-300;
+}
+
+.zen-mode.screenplay-preview h1,
+.zen-mode.screenplay-preview h2,
+.zen-mode.screenplay-preview h3,
+.zen-mode.screenplay-preview h4,
+.zen-mode.screenplay-preview h5,
+.zen-mode.screenplay-preview h6,
+.zen-mode.screenplay-preview .character {
+  @apply text-gray-100 dark:text-gray-200;
+}
+
+.zen-mode.screenplay-preview p,
+.zen-mode.screenplay-preview .dialogue {
+  @apply text-gray-200 dark:text-gray-300;
+}
+
+.zen-mode.screenplay-preview .parenthetical {
+  @apply text-gray-300 dark:text-gray-400;
+}
+
+.zen-mode.screenplay-preview .scene {
+  @apply text-gray-200 dark:text-gray-300;
+}
+
+/* Zen mode transitions */
+.zen-mode-enter {
+  @apply transition-all duration-500 ease-in-out;
+}
+
+.zen-mode-exit {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+}
