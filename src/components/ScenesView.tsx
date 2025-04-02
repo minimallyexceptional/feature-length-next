@@ -26,6 +26,7 @@ import useScriptStore from '../store/scriptStore';
 import { Scene } from '../types';
 import ModalSceneEditor from './ModalSceneEditor';
 import { v4 as uuidv4 } from 'uuid';
+import SearchBar from './shared/SearchBar';
 
 interface SortableSceneItemProps {
   scene: Scene;
@@ -270,16 +271,12 @@ const ScenesView: React.FC = () => {
       <div className="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/80 backdrop-blur-sm">
         <div className="max-w-screen-xl mx-auto p-4">
           <div className="flex items-center justify-between gap-4">
-            <div className="flex-1 max-w-md relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-              <input
-                type="text"
-                placeholder="Search scenes..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="search-input"
-              />
-            </div>
+            <SearchBar
+              placeholder="Search scenes..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="flex-1 max-w-md"
+            />
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setCardSize(prev => prev === 'normal' ? 'compact' : 'normal')}

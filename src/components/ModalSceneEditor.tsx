@@ -62,7 +62,7 @@ const ModalSceneEditor: React.FC<ModalSceneEditorProps> = ({ sceneId, onClose })
       updateScene(currentScene.id, {
         ...currentScene,
         content: currentScene.content
-      });
+      } as any);
     }, AUTO_SAVE_INTERVAL);
 
     return () => clearInterval(autoSaveTimer);
@@ -147,7 +147,7 @@ const ModalSceneEditor: React.FC<ModalSceneEditorProps> = ({ sceneId, onClose })
     updateScene(currentScene.id, { 
       ...currentScene,
       content: newContent 
-    });
+    } as any);
 
     const textBeforeCursor = newContent.slice(0, cursorPosition);
     const currentLine = textBeforeCursor.split('\n').pop() || '';
@@ -219,7 +219,7 @@ const ModalSceneEditor: React.FC<ModalSceneEditorProps> = ({ sceneId, onClose })
       updateScene(currentScene.id, { 
         ...currentScene!,
         content: newContent 
-      });
+      } as any);
       
       setTimeout(() => {
         const newPosition = lastAtSymbol + name.length + 1;
@@ -263,7 +263,7 @@ const ModalSceneEditor: React.FC<ModalSceneEditorProps> = ({ sceneId, onClose })
         updateScene(currentScene.id, { 
           ...currentScene!,
           content: newContent 
-        });
+        } as any);
         
         setTimeout(() => {
           const newPosition = lastHashSymbol + name.length + 1;
@@ -290,14 +290,14 @@ const ModalSceneEditor: React.FC<ModalSceneEditorProps> = ({ sceneId, onClose })
     updateScene(currentScene.id, {
       ...currentScene,
       heading: e.target.value
-    });
+    } as any);
   };
 
   const handleToolbarInsert = (text: string) => {
     if (!editorRef.current) return;
     const { selectionStart, selectionEnd } = editorRef.current;
     const newContent = currentScene.content.slice(0, selectionStart) + text + currentScene.content.slice(selectionEnd);
-    updateScene(currentScene.id, { ...currentScene, content: newContent });
+    updateScene(currentScene.id, { ...currentScene, content: newContent } as any);
   };
 
   if (isZenMode) {
@@ -309,7 +309,7 @@ const ModalSceneEditor: React.FC<ModalSceneEditorProps> = ({ sceneId, onClose })
           updateScene(currentScene.id, {
             ...currentScene,
             content
-          });
+          } as any);
         }}
         onExit={() => setIsZenMode(false)}
       />
@@ -323,7 +323,7 @@ const ModalSceneEditor: React.FC<ModalSceneEditorProps> = ({ sceneId, onClose })
           <input
             type="text"
             value={currentScene.heading}
-            onChange={e => updateScene(currentScene.id, { ...currentScene, heading: e.target.value })}
+            onChange={e => updateScene(currentScene.id, { ...currentScene, heading: e.target.value } as any)}
             className="bg-transparent text-xl font-semibold w-full focus:outline-none text-black dark:text-white"
             placeholder="Scene Heading"
           />

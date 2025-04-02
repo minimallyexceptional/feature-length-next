@@ -1,6 +1,7 @@
 import React from 'react';
 import { FileText, Users, MapPin, BookOpen, Archive, Settings, Type, Download, Save, HelpCircle } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
+import Button from './shared/Button';
 
 interface TopBarProps {
   currentView: string;
@@ -54,20 +55,20 @@ const TopBar: React.FC<TopBarProps> = ({ currentView, onViewChange, onShowBackup
               <HelpCircle size={18} />
               <span className="hidden sm:inline">Help</span>
             </button>
-            <button
+            <Button
+              variant="secondary"
+              icon={<Save size={18} />}
               onClick={onShowBackup}
-              className="btn btn-secondary flex items-center gap-2"
               title="Create Backup (Ctrl+B)"
             >
-              <Save size={18} />
               <span className="hidden sm:inline">Backup</span>
-            </button>
-            <button 
+            </Button>
+            <Button 
+              variant="primary"
               onClick={() => onViewChange('export')}
-              className="btn btn-primary flex items-center gap-2"
             >
-              <span>Export</span>
-            </button>
+              Export
+            </Button>
             <div className="w-px h-6 bg-gray-200 dark:bg-gray-800 mx-2" />
             <ThemeToggle />
           </div>

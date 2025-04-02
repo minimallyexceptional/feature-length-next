@@ -1,5 +1,8 @@
 import React from 'react';
 import useScriptStore from '../store/scriptStore';
+import Button from './shared/Button';
+import { X } from 'lucide-react';
+import { Location } from '../types';
 
 interface LocationEditorProps {
   locationId: string;
@@ -13,11 +16,11 @@ const LocationEditor: React.FC<LocationEditorProps> = ({ locationId, onClose }) 
   if (!location) return null;
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateLocation(locationId, { name: e.target.value });
+    updateLocation(locationId, { name: e.target.value } as any);
   };
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    updateLocation(locationId, { description: e.target.value });
+    updateLocation(locationId, { description: e.target.value } as any);
   };
 
   return (
@@ -25,12 +28,14 @@ const LocationEditor: React.FC<LocationEditorProps> = ({ locationId, onClose }) 
       <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4">
         <div className="border-b px-6 py-4 flex items-center justify-between">
           <h2 className="text-xl font-semibold text-gray-800">Edit Location</h2>
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
+            icon={<X size={18} />}
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 transition-colors"
-          >
-            ✕
-          </button>
+            className="text-gray-500 hover:text-gray-700"
+            aria-label="Close"
+          />
         </div>
 
         <div className="p-6 space-y-6">
@@ -64,12 +69,12 @@ const LocationEditor: React.FC<LocationEditorProps> = ({ locationId, onClose }) 
         </div>
 
         <div className="border-t px-6 py-4 flex justify-end">
-          <button
+          <Button
+            variant="primary"
             onClick={onClose}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             Done
-          </button>
+          </Button>
         </div>
       </div>
     </div>

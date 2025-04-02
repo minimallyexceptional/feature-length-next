@@ -25,6 +25,8 @@ import useScriptStore from '../store/scriptStore';
 import { Character } from '../types';
 import CharacterEditor from './CharacterEditor';
 import { v4 as uuidv4 } from 'uuid';
+import Button from './shared/Button';
+import SearchBar from './shared/SearchBar';
 
 interface SortableCharacterItemProps {
   character: Character;
@@ -99,13 +101,14 @@ const SortableCharacterItem: React.FC<SortableCharacterItemProps> = React.memo((
           </div>
           <div className="flex items-center gap-2">
             <User size={18} className="text-gray-400 dark:text-gray-500" />
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
+              icon={<Pencil size={16} />}
               onClick={handleEdit}
-              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
               title="Edit character"
-            >
-              <Pencil size={16} className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300" />
-            </button>
+              className="p-1"
+            />
           </div>
         </div>
         
@@ -154,13 +157,14 @@ const SortableCharacterItem: React.FC<SortableCharacterItemProps> = React.memo((
           </div>
           <div className="flex items-center gap-2">
             <User size={20} className="text-gray-400 dark:text-gray-500" />
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
+              icon={<Pencil size={18} />}
               onClick={handleEdit}
-              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
               title="Edit character"
-            >
-              <Pencil size={18} className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300" />
-            </button>
+              className="p-1"
+            />
           </div>
         </div>
         
@@ -256,20 +260,12 @@ const CharactersView: React.FC = () => {
       <div className="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
         <div className="max-w-screen-xl mx-auto p-4">
           <div className="flex items-center justify-between gap-4">
-            <div className="flex-1 max-w-md relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-              <input
-                type="text"
-                placeholder="Search characters..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border dark:border-gray-700 rounded-lg 
-                  focus:outline-none focus:ring-2 focus:ring-blue-500
-                  bg-white dark:bg-gray-800 
-                  text-gray-900 dark:text-white
-                  placeholder-gray-500 dark:placeholder-gray-400"
-              />
-            </div>
+            <SearchBar
+              placeholder="Search characters..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="flex-1 max-w-md"
+            />
             
             <div className="flex items-center gap-3">
               <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
@@ -297,18 +293,18 @@ const CharactersView: React.FC = () => {
                 </button>
               </div>
               
-              <button
+              <Button
+                variant="primary"
+                icon={<Plus size={18} />}
                 onClick={() => addCharacter({
                   id: uuidv4(),
                   name: 'New Character',
                   bio: '',
                   order: characters.length,
                 })}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
-                <Plus size={18} />
                 Add Character
-              </button>
+              </Button>
             </div>
           </div>
         </div>

@@ -138,7 +138,7 @@ const InlineSceneEditor: React.FC<InlineSceneEditorProps> = ({ sceneId }) => {
     updateScene(currentScene.id, { 
       ...currentScene,
       content: newContent 
-    });
+    } as any);
 
     const textBeforeCursor = newContent.slice(0, cursorPosition);
     const currentLine = textBeforeCursor.split('\n').pop() || '';
@@ -188,7 +188,7 @@ const InlineSceneEditor: React.FC<InlineSceneEditorProps> = ({ sceneId }) => {
       updateScene(currentScene.id, { 
         ...currentScene,
         content: newContent 
-      });
+      } as any);
       
       setTimeout(() => {
         const newPosition = lastAtSymbol + name.length + 1;
@@ -217,7 +217,7 @@ const InlineSceneEditor: React.FC<InlineSceneEditorProps> = ({ sceneId }) => {
       updateScene(currentScene.id, {
         ...currentScene,
         heading: sceneHeading
-      });
+      } as any);
     }
 
     setLocationAutocomplete(prev => ({ ...prev, show: false }));
@@ -227,7 +227,7 @@ const InlineSceneEditor: React.FC<InlineSceneEditorProps> = ({ sceneId }) => {
     if (!editorRef.current || !currentScene) return;
     const { selectionStart, selectionEnd } = editorRef.current;
     const newContent = currentScene.content.slice(0, selectionStart) + text + currentScene.content.slice(selectionEnd);
-    updateScene(currentScene.id, { ...currentScene, content: newContent });
+    updateScene(currentScene.id, { ...currentScene, content: newContent } as any);
   };
 
   if (!currentScene) {
@@ -246,7 +246,7 @@ const InlineSceneEditor: React.FC<InlineSceneEditorProps> = ({ sceneId }) => {
           updateScene(currentScene.id, {
             ...currentScene,
             content
-          });
+          } as any);
         }}
         onExit={() => setIsZenMode(false)}
       />
@@ -259,7 +259,7 @@ const InlineSceneEditor: React.FC<InlineSceneEditorProps> = ({ sceneId }) => {
         <input
           type="text"
           value={currentScene.heading}
-          onChange={e => updateScene(currentScene.id, { ...currentScene, heading: e.target.value })}
+          onChange={e => updateScene(currentScene.id, { ...currentScene, heading: e.target.value } as any)}
           className="bg-transparent text-xl font-semibold w-full focus:outline-none text-black dark:text-white"
           placeholder="Scene Heading"
         />

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Clock, FileText, Trash2, Save, Copy, Pencil } from 'lucide-react';
 import useScriptStore from '../store/scriptStore';
+import Button from './shared/Button';
 
 interface DraftsViewProps {
   onViewChange: (view: string) => void;
@@ -41,20 +42,19 @@ const RenameDialog: React.FC<RenameDialogProps> = ({ draftId, currentName, onClo
           autoFocus
         />
         <div className="flex justify-end gap-3">
-          <button
+          <Button
+            variant="ghost"
             onClick={onClose}
-            className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
           >
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="primary"
             onClick={handleRename}
             disabled={!newName.trim() || newName === currentName}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 
-              transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Rename
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -93,13 +93,13 @@ const DraftsView: React.FC<DraftsViewProps> = ({ onViewChange }) => {
         <div className="max-w-screen-xl mx-auto p-4">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Script Drafts</h2>
-            <button
+            <Button
+              variant="primary"
+              icon={<Save size={18} />}
               onClick={() => setShowSaveDialog(true)}
-              className="btn btn-primary"
             >
-              <Save size={18} />
               Save Current as Draft
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -126,34 +126,35 @@ const DraftsView: React.FC<DraftsViewProps> = ({ onViewChange }) => {
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <button
+                      <Button
+                        variant="outline"
+                        size="sm"
                         onClick={() => handleLoadDraft(draft.id)}
-                        className="px-4 py-2 text-sm text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md transition-colors"
                       >
                         Load Draft
-                      </button>
-                      <button
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        icon={<Pencil size={18} />}
                         onClick={() => setRenamingDraft({ id: draft.id, name: draft.name })}
-                        className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-md transition-colors"
                         title="Rename draft"
-                      >
-                        <Pencil size={18} />
-                      </button>
-                      <button
+                      />
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        icon={<Copy size={18} />}
                         onClick={() => duplicateDraft(draft.id)}
-                        className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-md transition-colors"
                         title="Duplicate draft"
-                      >
-                        <Copy size={18} />
-                      </button>
+                      />
                       {drafts.length > 1 && (
-                        <button
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          icon={<Trash2 size={18} />}
                           onClick={() => deleteDraft(draft.id)}
-                          className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-md transition-colors"
                           title="Delete draft"
-                        >
-                          <Trash2 size={18} />
-                        </button>
+                        />
                       )}
                     </div>
                   </div>
@@ -199,20 +200,19 @@ const DraftsView: React.FC<DraftsViewProps> = ({ onViewChange }) => {
               autoFocus
             />
             <div className="flex justify-end gap-3">
-              <button
+              <Button
+                variant="ghost"
                 onClick={() => setShowSaveDialog(false)}
-                className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="primary"
                 onClick={handleSaveDraft}
                 disabled={!newDraftName.trim()}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 
-                  transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Save Draft
-              </button>
+              </Button>
             </div>
           </div>
         </div>
